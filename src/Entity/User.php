@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 
 /**
+ * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
@@ -19,7 +20,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=25)
      */
     private $username;
 
@@ -36,16 +37,32 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", unique=true)
      */
-    private $apiKey;
+    private $apiToken;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+
     public function __construct()
     {
         $this->isActive = true;
+    }
+
+    /**
+     * @param string $username
+     */
+    public function setUsername($username): void
+    {
+        $this->username = $username;
     }
 
     public function getUsername()
@@ -53,14 +70,25 @@ class User implements UserInterface
         return $this->username;
     }
 
+    /**
+     * @param string $email
+     */
+    public function setEmail($email): void
+    {
+        $this->email = $email;
+    }
+
     public function getEmail()
     {
         return $this->email;
     }
 
-    public function getSalt()
+    /**
+     * @param string $password
+     */
+    public function setPassword($password): void
     {
-        return null;
+        $this->password = $password;
     }
 
     public function getPassword()
@@ -68,9 +96,38 @@ class User implements UserInterface
         return $this->password;
     }
 
+    /**
+     * @param string $apiToken
+     */
+    public function setApiToken($apiToken): void
+    {
+        $this->apiToken = $apiToken;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
     public function getRoles()
     {
         return array('ROLE_USER');
+    }
+
+    public function getSalt()
+    {
+        return null;
     }
 
     public function eraseCredentials()
